@@ -15,8 +15,8 @@
 
 <hr>
 
-> **Disclaimer:**
-> I am not an expert in Gleam and the code in this repository may not follow best practices, so use it for inspiration rather than as a learning resource.
+> [!NOTE]  
+> **Disclaimer:** I am not an expert in Gleam and the code in this repository may not follow best practices, so use it for inspiration rather than as a learning resource.
 
 ## Learning resources
 - [Gleam Tour](https://tour.gleam.run/)
