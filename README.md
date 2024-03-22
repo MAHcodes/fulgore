@@ -7,5 +7,5 @@
 </h1>
 
 <p align="center">
-    This is where my Gleam projects shine, watch them fulgore! ✨
+    ⭐ Gleam with me! Witness the spark ignite as I adventure into the world of Gleam. Follow my progress, explore my projects, and watch them fulgore! ✨
 </p>
