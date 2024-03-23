@@ -1,32 +1,52 @@
-import gleam/io
-import gleam/result.{try}
-import gleam/hackney
+import gleam/dynamic.{type Dynamic, field, int, list, string}
 import gleam/http/request
-import gleam/http/response.{type Response}
-import gleeunit/should
-import gleam/json
-import gleam/dynamic.{field, int, list, string}
-import gleam/string.{append, join, pad_right}
+import gleam/httpc
 import gleam/int.{to_string}
+import gleam/io
+import gleam/json
+import gleam/result
+import gleam/string
 
 const endpoint = "https://api.quotable.io"
 
-fn fetch_endpoint(endpoint: String) -> Result(Response(String), hackney.Error) {
-  let assert Ok(req) = request.to(endpoint)
-
-  use response <- try(
-    req
-    |> hackney.send,
-  )
-
-  response.status
-  |> should.equal(200)
-
-  Ok(response)
+pub type FetchError {
+  FailedToCreateRequest
+  FailedToSendRequest(Dynamic)
+  FailedToParse(json.DecodeError)
+  FailedToFetch
 }
 
-pub type QuoteResponse {
-  QuoteContent(
+fn fetch_quote() {
+  let quote_decoder =
+    dynamic.decode8(
+      Quote,
+      field("_id", of: string),
+      field("content", of: string),
+      field("author", of: string),
+      field("tags", of: list(string)),
+      field("authorSlug", of: string),
+      field("length", of: int),
+      field("dateAdded", of: string),
+      field("dateModified", of: string),
+    )
+
+  use req <- result.try(result.replace_error(
+    request.to(endpoint <> "/random"),
+    FailedToCreateRequest,
+  ))
+
+  use res <- result.try(result.map_error(httpc.send(req), FailedToSendRequest))
+
+  use quote <- result.try(result.map_error(
+    json.decode(from: res.body, using: quote_decoder),
+    FailedToParse,
+  ))
+
+  Ok(quote)
+}
+
+pub type Quote {
+  Quote(
     id: String,
     content: String,
     author: String,
@@ -38,39 +58,22 @@ pub type QuoteResponse {
   )
 }
 
-fn quote_to_json(json: String) -> Result(QuoteResponse, json.DecodeError) {
-  let quote_decoder =
-    dynamic.decode8(
-      QuoteContent,
-      field("_id", of: string),
-      field("content", of: string),
-      field("author", of: string),
-      field("tags", of: list(string)),
-      field("authorSlug", of: string),
-      field("length", of: int),
-      field("dateAdded", of: string),
-      field("dateModified", of: string),
-    )
-
-  json.decode(from: json, using: quote_decoder)
-}
-
 fn get_quote_endpoint(id: String) -> String {
   endpoint
-  |> append("/quotes/")
-  |> append(id)
+  |> string.append("/quotes/")
+  |> string.append(id)
 }
 
 fn print_field(key: String, value: String) -> Nil {
   key
-  |> append(" ")
-  |> pad_right(to: 18, with: ".")
-  |> append(" ")
-  |> append(value)
+  |> string.append(" ")
+  |> string.pad_right(to: 18, with: ".")
+  |> string.append(" ")
+  |> string.append(value)
   |> io.println
 }
 
-fn print_quote(quote: QuoteResponse) -> Nil {
+fn print_quote(quote: Quote) -> Nil {
   "Content"
   |> print_field(quote.content)
 
@@ -78,7 +81,7 @@ fn print_quote(quote: QuoteResponse) -> Nil {
   |> print_field(quote.author)
 
   quote.tags
-  |> join(", ")
+  |> string.join(", ")
   |> print_field("Tags", _)
 
   quote.id
@@ -97,8 +100,6 @@ fn print_quote(quote: QuoteResponse) -> Nil {
 }
 
 pub fn main() {
-  let assert Ok(res) = fetch_endpoint(endpoint <> "/random")
-  let assert Ok(quote) = quote_to_json(res.body)
-
+  let assert Ok(quote) = fetch_quote()
   print_quote(quote)
 }
