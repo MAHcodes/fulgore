@@ -13,7 +13,7 @@
     Follow my progress, explore my projects, and watch them fulgore! ✨
 </p>
 
-<hr>
+<br>
 
 > **Disclaimer:** I am not an expert in Gleam and the code in this repository may not follow best practices, so use it for inspiration rather than as a learning resource.
 
