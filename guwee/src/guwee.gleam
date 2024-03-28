@@ -1,5 +1,6 @@
 import gleam/int
 import lustre
+import lustre/attribute.{class}
 import lustre/element.{text}
 import lustre/element/html.{button, div, p}
 import lustre/event.{on_click}
@@ -35,8 +36,7 @@ fn view(model) {
   div([], [
     button([on_click(Incr)], [text(" + ")]),
     button([on_click(Decr)], [text(" - ")]),
-    button([on_click(Reset)], [text(" reset ")]),
-    p([], [text(count)]),
+    button([on_click(Reset)], [text("reset")]),
+    p([class("text-lg")], [text(count)]),
   ])
 }
-
