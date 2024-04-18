@@ -20,3 +20,5 @@
 ## Learning resources
 - [Gleam Tour](https://tour.gleam.run/)
 - [Gleam Docs](https://hexdocs.pm/gleam_stdlib/)
+- [Exercism](https://exercism.org/tracks/gleam)
+- [CodeCrafters](https://app.codecrafters.io/join?via=lpil)
