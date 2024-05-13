@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --fz-sm: clamp(0.8rem, 0.17vw + 0.76rem, 0.89rem);
+    --fz-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
+    --fz-md: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
+    --fz-lg: clamp(1.56rem, 1vw + 1.31rem, 2.11rem);
+    --fz-xl: clamp(1.95rem, 1.56vw + 1.56rem, 2.81rem);
+    --fz-2xl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+    --fz-3xl: clamp(3.05rem, 3.54vw + 2.17rem, 5rem);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold;
+  }
+  h1 {
+    @apply text-3xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+  h3 {
+    @apply text-xl;
+  }
+  h4 {
+    @apply text-lg;
+  }
+  h5 {
+    @apply text-md;
+  }
+  h6 {
+    @apply text-base;
+  }
+  p {
+    @apply text-base;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply block font-semibold text-center rounded-2xl px-8 py-4 -translate-y-1.5 hover:-translate-y-2.5 active:-translate-y-1.5 duration-300;
+  }
+  .btn.primary {
+    @apply bg-vodka;
+  }
+  .btn.secondary {
+    @apply bg-white;
+  }
+  .title {
+    @apply bg-gradient-to-r from-[#E100FF] to-[#7F00FF] font-semibold inline-block text-transparent bg-clip-text text-center text-lg;
+  }
+  .repo-github,
+  .repo-stars {
+    @apply bg-dark-charcoal rounded-2xl py-4 px-6 text-white font-semibold;
+  }
+  .repo-github {
+    @apply flex items-center gap-4;
+  }
+  .repo-stars {
+    @apply relative;
+  }
+  .repo-stars::before {
+    content: "";
+    @apply absolute z-10 top-1/2 left-1 -translate-x-full -translate-y-1/2 border-transparent border-r-dark-charcoal border-[.75rem];
+  }
+  .editor,
+  .browser {
+    @apply bg-white rounded-3xl h-[70vh] overflow-hidden;
+  }
+  .editor {
+    @apply focus-within:outline outline-vodka outline-2;
+  }
+  .tooltip {
+    @apply bg-dark-charcoal z-30 text-white py-2 px-4 rounded-lg absolute -top-8 left-1/2 -translate-y-1/2 scale-50 group-hover:scale-100 group-hover:-translate-y-full -translate-x-1/2 opacity-0 group-hover:opacity-100 duration-300 transition-all flex flex-col w-max items-center pointer-events-none;
+  }
+  .tooltip::after {
+    content: "";
+    @apply absolute z-30 bottom-[1px] left-1/2 -translate-x-1/2 translate-y-full border-transparent border-t-dark-charcoal border-[.75rem];
+  }
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("poppins-regular-webfont.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("poppins-semibold-webfont.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+}
+
+body {
+  background-color: #FFFFFF;
+  background-image: url("/gradient.svg"), url("/noise.png");
+  background-size: cover, 512px;
+  background-position: top center, top center;
+  background-repeat: repeat, repeat;
+
+  @apply text-dark-charcoal;
+}
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+* {
+  scrollbar-color: #B4BEFD white;
+}
+*::-webkit-scrollbar-track {
+  @apply bg-white;
+}
+*::-webkit-scrollbar-track:hover {
+  @apply bg-white;
+}
+*::-webkit-scrollbar-thumb {
+  @apply bg-vodka;
+}
+*::-webkit-scrollbar-thumb:hover {
+  @apply bg-vodka;
+}
+*::selection {
+  @apply bg-vodka text-dark-charcoal;
+}
+section {
+  @apply py-24 md:py-44;
+}
+img {
+  @apply select-none pointer-events-none;
+}
+
+#header {
+  @apply py-2 px-4 sticky top-0 z-20 transition-colors;
+}
+#header:not(.transparent) {
+  @apply backdrop-blur-md bg-white/30;
+}
+#header.transparent {
+  @apply bg-transparent;
+}
+#header .logo {
+  grid-area: logo;
+  @apply justify-self-start;
+}
+#header .nav {
+  grid-area: nav;
+  @apply hidden md:block justify-self-center w-full;
+}
+#header .socials {
+  grid-area: socials;
+  @apply justify-self-end;
+}
+#header > .container {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: "logo nav socials";
+  @apply grid items-center gap-0 md:gap-4;
+}
+
+@media only screen and (max-width: 768px) {
+  #header > .container {
+  grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "logo socials"
+      "nav nav";
+  }
+}
